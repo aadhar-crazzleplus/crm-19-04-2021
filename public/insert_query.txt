@@ -1,0 +1,114 @@
+CREATE TABLE `banksathi`.`payouts` ( `id` INT NOT NULL , `title` VARCHAR NULL , `file` VARCHAR NULL , `insurance_id` INT NULL , `status` ENUM('1','0') NOT NULL DEFAULT '\'1\'' , `created_at` TIMESTAMP NOT NULL , `updated_at` TIMESTAMP NOT NULL ) ENGINE = InnoDB;
+
+
+php artisan make:model Permission -mcr
+php artisan make:model CreditCardRequest -mr
+php artisan make:model InsuranceMis -mr
+php artisan make:model Wallet -mr
+
+
+Permission Table Create Query :
+
+CREATE TABLE `banksathi`.`permissions` ( `id` INT(50) NOT NULL AUTO_INCREMENT , `user_type` VARCHAR(50) NULL , `module` VARCHAR(50) NULL , `permissions` VARCHAR(100) NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+Module table :
+
+CREATE TABLE `banksathi`.`modules` ( `id` INT(50) NOT NULL AUTO_INCREMENT , `name` VARCHAR(255) NOT NULL , `status` ENUM('1','0') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+
+
+month
+timestamp
+advisor_name
+advisor_contact_no
+vehicle_type
+vehicle_model
+variant
+vehicle_rc
+previous_insurance
+claim_in_previous_year
+customer_name
+owner_contact_no
+owner_mail_id
+owner_date_of_birth
+nominee_name
+nominee_date_of_birth
+
+relation_with_nominee
+policy_type
+addon_required
+
+
+policy_status
+policy_no
+payment_date
+policy
+
+
+policy_expiry_date
+insurance_company
+premium_without_gst
+gst
+total_premium
+payout_basis
+commissionable_amount 
+percentage
+
+
+amount
+payout_to_lg
+payment_ecvd_month
+engine_no
+chassis_no
+previous_insurance_company
+previous_insurance_no
+rc_number
+pincode
+
+
+
+
+Date :
+25-MARCH-2021
+
+lead_profiles table alter query :
+
+ALTER TABLE `lead_profiles` ADD `nominee_name` VARCHAR(255) NULL AFTER `office_setup`, ADD `nominee_dob` VARCHAR(255) NULL AFTER `nominee_name`, ADD `nominee_relation` VARCHAR(255) NULL AFTER `nominee_dob`;
+
+
+
+
+
+CREATE TABLE `banksathi`.`wallet` ( `id` INT(100) NOT NULL AUTO_INCREMENT , `loan_type` ENUM('used','refinance','new') NULL , `prospect_month` VARCHAR(255) NULL , `prospect_amount` VARCHAR(255) NULL , `disbursement_date` VARCHAR(255) NULL , `roi` VARCHAR(100) NULL , `amount_recvd` VARCHAR(255) NULL , `payout_to_advisor` VARCHAR(255) NULL , `premium_without_gst` VARCHAR(255) NULL , `gst` VARCHAR(255) NULL , `total_premium` VARCHAR(255) NULL , `payout_basis` VARCHAR(255) NULL , `commissionable_amount` VARCHAR(255) NULL , `percentage` VARCHAR(255) NULL , `amount` VARCHAR(255) NULL , `payout_to_lg` VARCHAR(255) NULL , `payment_recvd_month` VARCHAR(255) NULL , `lead_id` INT(100) NULL , `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+ALTER TABLE `wallet` CHANGE `id` `id` INT NOT NULL auto_increment FIRST, CHANGE `lead_id` `lead_id` INT NULL DEFAULT NULL AFTER `id`, CHANGE `loan_type` `loan_type` ENUM('used','refinance','new') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `lead_id`, CHANGE `prospect_month` `prospect_month` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `loan_type`, CHANGE `prospect_amount` `prospect_amount` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `prospect_month`, CHANGE `disbursement_date` `disbursement_date` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `prospect_amount`, CHANGE `roi` `roi` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `disbursement_date`, CHANGE `amount_recvd` `amount_recvd` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `roi`, CHANGE `payout_to_advisor` `payout_to_advisor` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `amount_recvd`, CHANGE `premium_without_gst` `premium_without_gst` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `payout_to_advisor`, CHANGE `gst` `gst` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `premium_without_gst`, CHANGE `total_premium` `total_premium` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `gst`, CHANGE `payout_basis` `payout_basis` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `total_premium`, CHANGE `commissionable_amount` `commissionable_amount` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `payout_basis`, CHANGE `percentage` `percentage` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `commissionable_amount`, CHANGE `payout_to_lg` `payout_to_lg` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `amount`, CHANGE `payment_recvd_month` `payment_recvd_month` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL AFTER `payout_to_lg`
+
+
+
+lead date update query
+
+ALTER TABLE `leads` ADD `addon_required` VARCHAR(255) NULL AFTER `lead_remark`, ADD `policy_status` ENUM('1','2','3','4','5','6','7','8') NOT NULL DEFAULT '1' COMMENT '[1 => \'new lead\', 2 => \'customer not responding\', 3 => \'policy issued-under review\', 4 => \'policy issued\', 5 => \'shared quotation\', 6 => \'payment done policy pending\',7 => \'policy cancelled by customer\',8 => \'payment link shared payment due\'];' AFTER `addon_required`, ADD `payment_date` VARCHAR(100) NULL AFTER `policy_status`;
+
+
+
+ALTER TABLE `wallets` ADD `user_id` INT(100) NULL AFTER `lead_id`;
+
+ALTER TABLE `leads` ADD `unique_id` VARCHAR(255) NULL AFTER `id`;
+
+ALTER TABLE `lead_addresses` ADD `unique_id` VARCHAR(255) NULL AFTER `id`;
+
+ALTER TABLE `lead_is_cards` ADD `unique_id` VARCHAR(255) NULL AFTER `id`;
+
+ALTER TABLE `lead_is_loans` ADD `unique_id` VARCHAR(255) NULL AFTER `id`;
+
+ALTER TABLE `lead_profiles` ADD `unique_id` VARCHAR(255) NULL AFTER `id`;
+
+ALTER TABLE `lead_vehicles` ADD `unique_id` VARCHAR(255) NULL AFTER `id`;
+
+ALTER TABLE `wallets` ADD `unique_id` VARCHAR(255) NULL AFTER `id`;
+
+
+
